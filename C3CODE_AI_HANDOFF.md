@@ -10,8 +10,8 @@ reinstalling dependencies.
   workbench. Do not replace the workbench with an unrelated editor.
 - Use password authentication and bind to `127.0.0.1` by default. The owner
   chose local-only access; use an SSH tunnel for a remote host.
-- No c3code repository URL, issue tracker, release feed, or support URL has
-  been supplied. Do not invent or publish one.
+- No c3code release feed or support URL has been supplied. Do not invent or
+  publish one.
 - Keep upstream VS Code/code-server attribution and names where they describe
   the actual source or compatibility interfaces.
 
@@ -19,12 +19,9 @@ reinstalling dependencies.
 
 - Project directory: `/srv/c3code`.
 - The c3code GitHub repository is `https://github.com/popperton22/c3code.git`.
-  It was confirmed empty and public before the owner explicitly approved
-  publishing this project there. The local root Git repository is initialized
-  on `main` with that remote configured. The initial source commit is
-  `bf93de4`; its push was blocked because this host has no GitHub credentials.
-  Authenticate Git safely on the host, verify the remote is still empty, then
-  push `main`. Do not force-push or rewrite remote history.
+  The owner approved public publishing; the source has been pushed to `main`.
+  Check the remote before any further push; do not force-push or rewrite
+  history.
 - The project root had no `.git` metadata when this source-provided copy was
   received. It now has local Git metadata; continue with normal root Git
   commands and do not replace this project with an upstream clone.
@@ -144,7 +141,7 @@ the same loopback URL on the client. Confirm the log says it is listening on
   a c3code source copy without root Git metadata.
 - `docs/README.md` contains build, localhost launch, and SSH tunnel instructions.
 
-The root `package.json` deliberately has no guessed homepage/repository fields;
+The root `package.json` repository points to the user-provided GitHub project;
 its lockfile package name and executable entry must continue to match it.
 
 ## Verification record

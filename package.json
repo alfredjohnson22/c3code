@@ -3,6 +3,7 @@
   "license": "MIT",
   "version": "0.0.0",
   "description": "A modern personal web IDE powered by VS Code in the browser.",
+  "repository": "https://github.com/popperton22/c3code.git",
   "scripts": {
     "clean": "./ci/build/clean.sh",
     "build": "./ci/build/build-code-server.sh",

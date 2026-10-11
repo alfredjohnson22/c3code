@@ -18,9 +18,10 @@ scripts.
 
 ## Build from a complete source checkout
 
-The c3code source currently has no published repository URL. Do not substitute
-the VS Code repository for the c3code project. The VS Code Git checkout is a
-separate dependency under `lib/vscode`; this project is pinned to tag `1.141.0`.
+The c3code source is hosted at
+<https://github.com/popperton22/c3code>. Do not substitute the VS Code
+repository for the c3code project. The VS Code Git checkout is a separate
+dependency under `lib/vscode`; this project is pinned to tag `1.141.0`.
 
 On a complete c3code Git checkout with its submodule initialized:
 
@@ -71,5 +72,5 @@ without a deliberate HTTPS and network-access design.
   VS Code.
 - Legacy code-server paths and environment variables are retained where needed
   to avoid breaking existing installations.
-- No c3code repository, issue tracker, release feed, or support URL has been
-  supplied. Do not invent or publish one.
+- No c3code release feed or support URL has been supplied. Do not invent or
+  publish one.
