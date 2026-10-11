@@ -20,8 +20,8 @@ reinstalling dependencies.
 - Project directory: `/srv/c3code`.
 - The c3code GitHub repository is `https://github.com/popperton22/c3code.git`.
   The owner approved public publishing; the source has been pushed to `main`.
-  Check the remote before any further push; do not force-push or rewrite
-  history.
+  The latest published commit at handoff time is `4507996`. Check the remote
+  before any further push; do not force-push or rewrite history.
 - The project root had no `.git` metadata when this source-provided copy was
   received. It now has local Git metadata; continue with normal root Git
   commands and do not replace this project with an upstream clone.
@@ -139,15 +139,20 @@ the same loopback URL on the client. Confirm the log says it is listening on
   reports to the unrelated upstream code-server project.
 - `ci/build/build-vscode.sh` has a deterministic source-version fallback for
   a c3code source copy without root Git metadata.
-- `docs/README.md` contains build, localhost launch, and SSH tunnel instructions.
+- `README.md` and `docs/README.md` contain build, localhost launch, and SSH
+  tunnel instructions.
 
 The root `package.json` repository points to the user-provided GitHub project;
 its lockfile package name and executable entry must continue to match it.
 
 ## Verification record
 
-- `npm run build` for c3code completed successfully earlier in this setup.
-- Focused password-hash tests passed.
+- `npm run build` for c3code succeeded, including after package identity and
+  documentation updates.
+- Focused path, CLI, and package-identity tests passed: 149 tests across
+  `util.test.ts`, `cli.test.ts`, and `constants.test.ts`. Jest warned about
+  open handles after the passing results; the test process was stopped rather
+  than left competing for host resources.
 - The initial VS Code build did **not** complete: its dependency setup was
   interrupted for memory safety, and no VS Code server output exists yet.
 - The server has not been validated in a browser and must not be described as
