@@ -21,8 +21,10 @@ reinstalling dependencies.
 - The c3code GitHub repository is `https://github.com/popperton22/c3code.git`.
   It was confirmed empty and public before the owner explicitly approved
   publishing this project there. The local root Git repository is initialized
-  on `main` with that remote configured; the initial source commit/push is the
-  immediate continuation task. Do not force-push or rewrite remote history.
+  on `main` with that remote configured. The initial source commit is
+  `bf93de4`; its push was blocked because this host has no GitHub credentials.
+  Authenticate Git safely on the host, verify the remote is still empty, then
+  push `main`. Do not force-push or rewrite remote history.
 - The project root had no `.git` metadata when this source-provided copy was
   received. It now has local Git metadata; continue with normal root Git
   commands and do not replace this project with an upstream clone.
