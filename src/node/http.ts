@@ -2,6 +2,7 @@ import { field, logger } from "@coder/logger"
 import * as express from "express"
 import * as http from "http"
 import * as net from "net"
+import * as tls from "tls"
 import qs from "qs"
 import { Disposable } from "../common/emitter"
 import { HttpCode, HttpError } from "../common/http"
@@ -317,9 +318,13 @@ export const getCookieOptions = (req: express.Request): express.CookieOptions =>
     req.query.base || req.body?.base || "/",
     req.query.href || req.body?.href || "http://" + (req.headers.host || "localhost"),
   )
+  const forwardedProto = getFirstHeader(req, "x-forwarded-proto")
   return {
     domain: getCookieDomain(url.host, req.args["proxy-domain"]),
     path: normalize(url.pathname) || "/",
+    secure:
+      req.socket instanceof tls.TLSSocket ||
+      forwardedProto?.split(",")[0].trim().toLowerCase() === "https",
     sameSite: "lax",
   }
 }

@@ -75,7 +75,7 @@
     "js-yaml": "^5.2.3",
     "limiter": "^4.1.0",
     "pem": "^1.14.8",
-    "proxy-agent": "^6.3.1",
+    "proxy-agent": "^6.5.0",
     "qs": "^6.15.0",
     "rotating-file-stream": "^3.1.1",
     "safe-compare": "^1.1.4",
@@ -144,5 +144,12 @@
       "^.+\\.(css|less)$": "<rootDir>/test/utils/cssStub.ts"
     },
     "globalSetup": "<rootDir>/test/utils/globalUnitSetup.ts"
+  },
+  "allowScripts": {
+    "argon2@0.44.0": true,
+    "unrs-resolver@1.11.1": true
+  },
+  "overrides": {
+    "basic-ftp": "6.2.1"
   }
 }

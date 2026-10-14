@@ -159,11 +159,11 @@ EOF
   # Set vars and fix paths.
   case $OS in
     windows)
-      fix-bin-script remote-cli/code-server.cmd
+      fix-bin-script remote-cli/c3code.cmd
       fix-bin-script helpers/browser.cmd
       ;;
     *)
-      fix-bin-script remote-cli/code-server
+      fix-bin-script remote-cli/c3code
       fix-bin-script helpers/browser.sh
       ;;
   esac

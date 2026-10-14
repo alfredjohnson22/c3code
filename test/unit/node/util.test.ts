@@ -429,7 +429,7 @@ describe("onLine", () => {
       })
       const mockCallback = jest.fn()
 
-      expect(() => util.onLine(proc, mockCallback)).toThrowError(/stdout/)
+      expect(() => util.onLine(proc, mockCallback)).toThrow(/stdout/)
 
       // Cleanup
       proc?.kill()

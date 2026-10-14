@@ -33,30 +33,21 @@ reinstalling dependencies.
 - Node.js `v24.21.0` is installed locally at
   `/home/ec2-user/.local/lib/node-v24.21.0-linux-x64`; add
   `/home/ec2-user/.local/bin` to `PATH`.
-- The c3code TypeScript output exists under `out/`; the focused password hash
-  unit tests passed in the previous work.
-- The VS Code browser/server bundle is **not built**:
-  `lib/vscode/out/server-main.js` and `lib/vscode-reh-web-linux-x64` are
-  missing. The most recent request to `http://127.0.0.1:8080/` returned
-  connection refused because no c3code server is running.
-- Do not start `out/node/entry.js` until the missing VS Code output exists.
-  Starting it early returns HTTP 500 and does not mean the IDE is available.
-- c3code is intentionally stopped to protect the host. The separate
-  `/home/ec2-user/.vscode-server` processes belong to the active VS Code remote
-  coding session; do not stop or modify them.
+- The current build host has 15 GiB RAM and about 143 GiB free disk.
+- The c3code TypeScript output and VS Code browser/server bundle have been
+  built. The assembled release is `/srv/c3code/release`.
+- c3code is running from the release, bound only to `127.0.0.1:8080` with
+  password authentication. The password is stored privately in
+  `/home/ec2-user/.config/c3code/server-password` (mode 600); logs are in
+  `/home/ec2-user/.local/state/c3code/server.log` (mode 600).
+- The separate `/home/ec2-user/.vscode-server` processes belong to the active
+  VS Code remote coding session; do not stop or modify them.
 
 ## Build blocker and safe recovery
 
-The current host has about 4 GB RAM and no swap. A VS Code dependency install
-previously reached roughly 2.9 GB of use with only about 117 MB free. It was
-stopped before the host or active editor was destabilized. The dependency
-installation is incomplete; there are partial `node_modules` directories, but
-no successful postinstall state or compiled VS Code output.
-
-Do not retry the full dependency install/build on this host without an
-explicitly approved memory plan. The recommended destination is a build host
-with at least 16 GB RAM and 50 GB free disk space. This is a resource-safety
-blocker, not evidence of a source-code compile failure.
+An earlier 4 GB host could not safely complete the VS Code dependency install.
+The project was moved to the current larger host; on this host, the required
+builds completed successfully.
 
 ### Continuing on a larger server
 
@@ -101,7 +92,9 @@ remote, and extension dependencies; allow it to complete. The c3code build
 script computes a fallback build identifier when the c3code root has no Git
 metadata. The VS Code build still needs the nested `lib/vscode/.git` checkout.
 The build script updates VS Code product metadata for c3code during the build
-and restores the checked-in `product.json` afterward.
+and restores the checked-in `product.json` afterward. Keep the VS Code build
+on Gulp 4 (`^4.0.0`); the attempted Gulp 5 stream migration produced malformed
+native modules in the packaged output and was reverted.
 
 If the build fails, capture the **first** error and the last 100 lines of the
 same build log before retrying. Do not suppress errors or continue after a
@@ -109,13 +102,15 @@ failed prerequisite.
 
 ## Starting and checking the IDE
 
-Only after the `test -f` check above succeeds, start from `/srv/c3code`:
+The currently running service was assembled with `KEEP_MODULES=1 npm run
+release`. This keeps the native modules from the validated Linux build; do not
+run `npm install` in the release directory, as it replaced native addons with
+malformed binaries on this host. To start it again:
 
 ```bash
-read -rsp "Choose a c3code password: " PASSWORD
-printf '\n'
-export PASSWORD
-node out/node/entry.js \
+cd /srv/c3code/release
+PASSWORD="$(cat /home/ec2-user/.config/c3code/server-password)" \
+  node out/node/entry.js \
   --auth password \
   --bind-addr 127.0.0.1:8080 \
   --disable-telemetry \
@@ -153,12 +148,18 @@ its lockfile package name and executable entry must continue to match it.
   `util.test.ts`, `cli.test.ts`, and `constants.test.ts`. Jest warned about
   open handles after the passing results; the test process was stopped rather
   than left competing for host resources.
-- The initial VS Code build did **not** complete: its dependency setup was
-  interrupted for memory safety, and no VS Code server output exists yet.
-- The server has not been validated in a browser and must not be described as
-  running until an authenticated HTTP/browser check succeeds.
-
-When continuing, verify the lockfile/package identity, run the focused
-c3code build and tests, complete the VS Code install/build on the larger host,
-then perform the localhost-only launch and login check. Update this handoff
-with actual outcomes; never turn an attempted command into a claimed success.
+- On the 15 GiB host, `npm run build`,
+  `VSCODE_QUALITY=stable npm run gulp compile-copilot-extension-full-build`,
+  `VSCODE_QUALITY=stable npm run gulp core-ci`, and
+  `BUILD_SOURCEVERSION=f242824c53e6f94e8981ac78d1bc276190fb6852 VSCODE_QUALITY=stable npm run gulp
+  vscode-reh-web-linux-x64-min-ci` completed successfully. The Linux server
+  package was rebuilt with Gulp 4 and its native addons validated.
+- `KEEP_MODULES=1 npm run release` assembled the runnable release. The
+  packaged `spdlog`, SQLite, watcher, and node-pty addons loaded successfully
+  under Node 24, and every shipped `.node` file passed ELF validation.
+- Runtime check passed: unauthenticated `/` returned 302 to `/login`, `/login`
+  returned 200, and password-authenticated `/` returned 200. The process
+  remains bound to loopback; access remotely through an SSH tunnel.
+- The root project audit was clean; the VS Code core dependency tree still has
+  upstream high-severity advisories without an available fix. Do not describe
+  every dependency tree as clear.

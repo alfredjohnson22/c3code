@@ -4,18 +4,17 @@
   "devDependencies": {
     "@jest-mock/express": "^1.4.5",
     "@playwright/test": "^1.61.0",
-    "@types/jest": "^27.0.2",
+    "@types/jest": "^30.0.0",
     "@types/jsdom": "^16.2.13",
     "@types/node-fetch": "^2.5.8",
     "@types/wtfnode": "^0.7.0",
     "argon2": "^0.44.0",
-    "extract-zip": "^2.0.1",
-    "jest": "^27.3.1",
+    "jest": "^30.5.2",
     "jest-fetch-mock": "^3.0.3",
     "jsdom": "^16.4.0",
     "node-fetch": "^2.6.7",
     "playwright": "^1.61.0",
-    "ts-jest": "^27.0.7",
+    "ts-jest": "^29.4.14",
     "wtfnode": "^0.9.1"
   },
   "resolutions": {
@@ -24,5 +23,9 @@
     "tmpl": "^1.0.5",
     "path-parse": "^1.0.7",
     "json-schema": "^0.4.0"
+  },
+  "overrides": {
+    "@tootallnate/once": "^2.0.1",
+    "argparse": "^2.0.1"
   }
 }

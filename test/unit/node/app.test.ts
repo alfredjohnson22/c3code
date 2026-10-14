@@ -184,7 +184,7 @@ describe("handleArgsSocketCatchError", () => {
 
     expect(() => {
       handleArgsSocketCatchError(error)
-    }).toThrowError(error)
+    }).toThrow(error)
   })
 
   it("should log an error if its not an NodeJS.ErrnoException (and the error has a message)", () => {
@@ -193,7 +193,7 @@ describe("handleArgsSocketCatchError", () => {
 
     expect(() => {
       handleArgsSocketCatchError(error)
-    }).toThrowError(error)
+    }).toThrow(error)
   })
 
   it("should not log an error if its a NodeJS.ErrnoException", () => {
@@ -205,7 +205,7 @@ describe("handleArgsSocketCatchError", () => {
 
     expect(() => {
       handleArgsSocketCatchError(error)
-    }).not.toThrowError()
+    }).not.toThrow()
   })
 
   it("should log an error if the code is not ENOENT (and the error has a message)", () => {
@@ -216,7 +216,7 @@ describe("handleArgsSocketCatchError", () => {
 
     expect(() => {
       handleArgsSocketCatchError(error)
-    }).toThrowError(error)
+    }).toThrow(error)
   })
 
   it("should log an error if the code is not ENOENT", () => {
@@ -226,7 +226,7 @@ describe("handleArgsSocketCatchError", () => {
 
     expect(() => {
       handleArgsSocketCatchError(error)
-    }).toThrowError(error)
+    }).toThrow(error)
   })
 })
 

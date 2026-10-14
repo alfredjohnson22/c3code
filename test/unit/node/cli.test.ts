@@ -255,31 +255,31 @@ describe("parser", () => {
   })
 
   it("should error if value isn't provided", () => {
-    expect(() => parse(["--auth"])).toThrowError(/--auth requires a value/)
-    expect(() => parse(["--auth=", "--log=debug"])).toThrowError(/--auth requires a value/)
-    expect(() => parse(["--auth", "--log"])).toThrowError(/--auth requires a value/)
-    expect(() => parse(["--auth", "--invalid"])).toThrowError(/--auth requires a value/)
-    expect(() => parse(["--bind-addr"])).toThrowError(/--bind-addr requires a value/)
+    expect(() => parse(["--auth"])).toThrow(/--auth requires a value/)
+    expect(() => parse(["--auth=", "--log=debug"])).toThrow(/--auth requires a value/)
+    expect(() => parse(["--auth", "--log"])).toThrow(/--auth requires a value/)
+    expect(() => parse(["--auth", "--invalid"])).toThrow(/--auth requires a value/)
+    expect(() => parse(["--bind-addr"])).toThrow(/--bind-addr requires a value/)
   })
 
   it("should error if value is invalid", () => {
-    expect(() => parse(["--port", "foo"])).toThrowError(/--port must be a number/)
-    expect(() => parse(["--auth", "invalid"])).toThrowError(/--auth valid values: \[password, none\]/)
-    expect(() => parse(["--log", "invalid"])).toThrowError(/--log valid values: \[trace, debug, info, warn, error\]/)
+    expect(() => parse(["--port", "foo"])).toThrow(/--port must be a number/)
+    expect(() => parse(["--auth", "invalid"])).toThrow(/--auth valid values: \[password, none\]/)
+    expect(() => parse(["--log", "invalid"])).toThrow(/--log valid values: \[trace, debug, info, warn, error\]/)
   })
 
   it("should error if idle-timeout-seconds is too low", () => {
-    expect(() => parse(["--idle-timeout-seconds=60"])).toThrowError(
+    expect(() => parse(["--idle-timeout-seconds=60"])).toThrow(
       /--idle-timeout-seconds must be greater than 60 seconds/,
     )
-    expect(() => parse(["--idle-timeout-seconds", "60"])).toThrowError(
+    expect(() => parse(["--idle-timeout-seconds", "60"])).toThrow(
       /--idle-timeout-seconds must be greater than 60 seconds/,
     )
     expect(parse(["--idle-timeout-seconds", "61"])).toEqual({ "idle-timeout-seconds": 61 })
   })
 
   it("should error if the option doesn't exist", () => {
-    expect(() => parse(["--foo"])).toThrowError(/Unknown option --foo/)
+    expect(() => parse(["--foo"])).toThrow(/Unknown option --foo/)
   })
 
   it("should not error if the value is optional", async () => {
@@ -291,12 +291,12 @@ describe("parser", () => {
   })
 
   it("should not allow option-like values", () => {
-    expect(() => parse(["--socket", "--socket-path-value"])).toThrowError(/--socket requires a value/)
+    expect(() => parse(["--socket", "--socket-path-value"])).toThrow(/--socket requires a value/)
     // If you actually had a path like this you would do this instead:
     expect(parse(["--socket", "./--socket-path-value"])).toEqual({
       socket: path.resolve("--socket-path-value"),
     })
-    expect(() => parse(["--cert", "--socket-path-value"])).toThrowError(/Unknown option --socket-path-value/)
+    expect(() => parse(["--cert", "--socket-path-value"])).toThrow(/Unknown option --socket-path-value/)
   })
 
   it("should allow positional arguments before options", async () => {
@@ -307,7 +307,7 @@ describe("parser", () => {
   })
 
   it("should support repeatable flags", async () => {
-    expect(() => parse(["--proxy-domain", ""])).toThrowError(/--proxy-domain requires a value/)
+    expect(() => parse(["--proxy-domain", ""])).toThrow(/--proxy-domain requires a value/)
     expect(parse(["--proxy-domain", "*.coder.com"])).toEqual({
       "proxy-domain": ["*.coder.com"],
     })
@@ -327,7 +327,7 @@ describe("parser", () => {
         value: undefined,
       },
     })
-    expect(() => parse(["--cert", "test"])).toThrowError(/--cert-key is missing/)
+    expect(() => parse(["--cert", "test"])).toThrow(/--cert-key is missing/)
     const defaultArgs = await setDefaults(args)
     expect(defaultArgs).toEqual({
       ...defaults,
@@ -498,19 +498,19 @@ describe("parser", () => {
   })
 
   it("should error if password passed in", () => {
-    expect(() => parse(["--password", "supersecret123"])).toThrowError(
+    expect(() => parse(["--password", "supersecret123"])).toThrow(
       "--password can only be set in the config file or passed in via $PASSWORD",
     )
   })
 
   it("should error if hashed-password passed in", () => {
-    expect(() => parse(["--hashed-password", "fdas423fs8a"])).toThrowError(
+    expect(() => parse(["--hashed-password", "fdas423fs8a"])).toThrow(
       "--hashed-password can only be set in the config file or passed in via $HASHED_PASSWORD",
     )
   })
 
   it("should error if github-auth passed in", () => {
-    expect(() => parse(["--github-auth", "fdas423fs8a"])).toThrowError(
+    expect(() => parse(["--github-auth", "fdas423fs8a"])).toThrow(
       "--github-auth can only be set in the config file or passed in via $GITHUB_TOKEN",
     )
   })
@@ -559,10 +559,10 @@ describe("parser", () => {
       parse(["--foo"], {
         configFile: fakePath,
       }),
-    ).toThrowError(expectedErrMsg)
+    ).toThrow(expectedErrMsg)
   })
   it("should fail to parse invalid config", () => {
-    expect(() => parseConfigFile("test", "/fake-config-path")).toThrowError("invalid config: test")
+    expect(() => parseConfigFile("test", "/fake-config-path")).toThrow("invalid config: test")
   })
   it("should parse repeatable options", () => {
     const configContents = `

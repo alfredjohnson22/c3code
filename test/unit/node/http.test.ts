@@ -11,6 +11,29 @@ describe("http", () => {
     jest.clearAllMocks()
   })
 
+  describe("getCookieOptions", () => {
+    const getOptions = (protocol: string) =>
+      http.getCookieOptions(
+        getMockReq({
+          headers: {
+            host: "code.c3cloud.org",
+            "x-forwarded-proto": protocol,
+          },
+          args: {
+            "proxy-domain": [],
+          },
+        }),
+      )
+
+    it("marks cookies secure for HTTPS reverse proxies", () => {
+      expect(getOptions("https").secure).toBe(true)
+    })
+
+    it("does not mark cookies secure for HTTP localhost usage", () => {
+      expect(getOptions("http").secure).toBe(false)
+    })
+  })
+
   it("should construct a relative path to the root", () => {
     expect(http.relativeRoot("/")).toStrictEqual(".")
     expect(http.relativeRoot("/foo")).toStrictEqual(".")
